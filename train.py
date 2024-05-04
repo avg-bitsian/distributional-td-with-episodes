@@ -135,9 +135,14 @@ def train_epoch(model, dataloader, loss_fn, alpha_plus, alpha_minus, optimizer=N
             # print("reward in the epoch with y = ", torch.nonzero(y[:,:,:], as_tuple=False))
             # print("reward indices in the epoch = \n", torch.nonzero(y2[:-1,:,:], as_tuple=False))
 
-            alpha = alpha_plus*(V_target > V_hat) + alpha_minus*(V_target <= V_hat)    # [T x batch_size x N]
+            alpha = np.multiply(alpha_plus, (V_target > V_hat)) + np.multiply(alpha_minus, (V_target <= V_hat))    # [T x batch_size x N]
             V_hat_2 = torch.sqrt(alpha)*V_hat
             V_target_2 = torch.sqrt(alpha)*V_target
+
+            # alpha_0 = alpha_plus[0]*(V_target > V_hat) + alpha_minus[0]*(V_target <= V_hat)    # [T x batch_size x N]
+            # alpha_1 = alpha_plus[1]*(V_target > V_hat) + alpha_minus[1]*(V_target <= V_hat)    # [T x batch_size x N]
+            # V_hat_2 = torch.sqrt(alpha_0 + alpha_1)*V_hat
+            # V_target_2 = torch.sqrt(alpha_0 + alpha_1)*V_target
 
         # do not compute loss on padded values
         loss = 0.0
