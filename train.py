@@ -324,7 +324,8 @@ def probe_model(model, alpha_plus, alpha_minus, dataloader=None, experiment=None
                     V_target = r + model.gamma*V_next
                     # rpe = V_target - V_hat
 
-                    alpha = alpha_plus*(V_target > V_hat) + alpha_minus*(V_target <= V_hat)    # [T x batch_size x N]
+                    # alpha = alpha_plus*(V_target > V_hat) + alpha_minus*(V_target <= V_hat)    # [T x batch_size x N]
+                    alpha = np.multiply(alpha_plus, (V_target > V_hat)) + np.multiply(alpha_minus, (V_target <= V_hat))
                     V_hat_2 = np.sqrt(alpha)*V_hat
                     V_target_2 = np.sqrt(alpha)*V_target
 
